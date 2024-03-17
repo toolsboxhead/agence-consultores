@@ -10,7 +10,6 @@
             <div class="row m-2 filtros ">
                 <div class="col">
                     <div>
-                        <p>{{ ultimoDiaMes('2023-07-05') }}</p>
                         <label for="meses">Meses:</label>
                         <select id="meses" onchange="guardarMesSeleccionado()">
                             @for ($i = 1; $i <= 12; $i++)
