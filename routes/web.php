@@ -19,9 +19,11 @@ use App\Http\Controllers\DatosController;
 */
 
 route::view('/','main')->name('main');
+Route::view('graficar','comercial.graphs.grafica')->name('grafica');
 Route::get('/performance_comercial',[ComercialController::class,'listarConsultores'])->name('comercial.perfcomercial');
 Route::post('/tabla_datos',[ComercialController::class,'mostrarAcumuladoPorMes'])->name('comercial.datos_performance');
 Route::post('/actualizar-tabla', [ComercialController::class,'obtenerDatos'])->name('comercial.datos_perfomance');
+Route::post('grafica-bar',[ComercialController::class,'graficaBarras'])->name('comercial.graficabarras');
 Route::post('miJqueryAjax',[AjaxController::class,'index']);
 Route::post('acumulado-Mes',[DatosController::class,'mostrarDatosUsuario'])->name('datosview');
 Route::get('/datos-view',[DatosController::class,'mostrarVista'])->name('comercial1.datosview');

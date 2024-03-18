@@ -9,6 +9,7 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/mijs.js",
                 "resources/scss/miestilo.css",
+                "resources/js/acquisitions.js",
             ],
             refresh: true,
         }),
@@ -20,15 +21,12 @@ export default defineConfig({
     },
     define: {
         "process.env": {
-
-
-             CDN_JQUERY: JSON.stringify(
+            CDN_JQUERY: JSON.stringify(
                 "//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"
             ),
             CDN_DUALLIST: JSON.stringify(
                 "https://cdn.jsdelivr.net/npm/bootstrap-duallistbox@3.0.6/dist/jquery.bootstrap-duallistbox.min.js"
             ),
-
         },
     },
 });

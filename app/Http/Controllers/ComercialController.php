@@ -33,10 +33,6 @@ class ComercialController extends Controller
         $ann_hasta = $request->input('aniohasta');
         $fec_desde = $ann_desde.'-'.$mes_desde.'-'.'01';
         $fec_hasta = ultimoDiaMes($ann_hasta.'-'.$mes_hasta.'-'.'01');
-        /* var_dump($fec_hasta) */;
-        /* $fec_desde='2006-02-01';
-        $fec_hasta='2009-04-29'; */
-        /* $set_consu= "'carlos.arruda', 'anapaula.chiodaro','renato.pereira'"; */
         $set_consu=$request->input('set_consults');
 
             $queryModel = new QueryModel();
@@ -54,5 +50,21 @@ class ComercialController extends Controller
         $consults = $queryModel->listUsuarios();
 
             return view('comercial.perf_comercial',['consults' => $consults]);
+    }
+
+    public function graficaBarras(Request $request)
+    {
+        $mes_desde = $request->input('mesdesde');
+        $ann_desde = $request->input('aniodesde');
+        $mes_hasta = $request->input('meshasta');
+        $ann_hasta = $request->input('aniohasta');
+        $fec_desde = $ann_desde.'-'.$mes_desde.'-'.'01';
+        $fec_hasta = ultimoDiaMes($ann_hasta.'-'.$mes_hasta.'-'.'01');
+        $set_consu=$request->input('set_consults');
+
+        $queryModel = new QueryModel();
+        $datos = $queryModel->obtenerDatosPerformance($fec_desde,$fec_hasta,$set_consu);
+        return response()->json([
+            'html' => view('comercial.graphs.bargraphic')->render()]);
     }
 }
