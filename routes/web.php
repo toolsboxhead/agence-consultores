@@ -24,6 +24,7 @@ Route::get('/performance_comercial',[ComercialController::class,'listarConsultor
 Route::post('/tabla_datos',[ComercialController::class,'mostrarAcumuladoPorMes'])->name('comercial.datos_performance');
 Route::post('/actualizar-tabla', [ComercialController::class,'obtenerDatos'])->name('comercial.datos_perfomance');
 Route::post('grafica-bar',[ComercialController::class,'graficaBarras'])->name('comercial.graficabarras');
+Route::post('grafica-pie',[ComercialController::class,'graficaAreas'])->name('comercial.graficaArea');
 Route::post('miJqueryAjax',[AjaxController::class,'index']);
 Route::post('acumulado-Mes',[DatosController::class,'mostrarDatosUsuario'])->name('datosview');
 Route::get('/datos-view',[DatosController::class,'mostrarVista'])->name('comercial1.datosview');

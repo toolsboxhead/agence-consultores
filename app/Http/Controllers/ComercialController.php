@@ -50,6 +50,7 @@ class ComercialController extends Controller
         $consults = $queryModel->listUsuarios();
 
             return view('comercial.perf_comercial',['consults' => $consults]);
+            /* echo json_encode($datos); */
     }
 
     public function graficaBarras(Request $request)
@@ -63,8 +64,36 @@ class ComercialController extends Controller
         $set_consu=$request->input('set_consults');
 
         $queryModel = new QueryModel();
-        $datos = $queryModel->obtenerDatosPerformance($fec_desde,$fec_hasta,$set_consu);
-        return response()->json([
-            'html' => view('comercial.graphs.bargraphic')->render()]);
+        $datos = $queryModel->dataGraphConsults($fec_desde,$fec_hasta,$set_consu);
+
+
+
+    return response()->json([
+        'html' => view('comercial.graphs.bargraphic', ['datos' => $datos])->render(),
+        'datos' => $datos // Pasar también los datos como parte de la respuesta JSON
+    ]);
+
+    }
+
+    public function graficaAreas(Request $request)
+    {
+        $mes_desde = $request->input('mesdesde');
+        $ann_desde = $request->input('aniodesde');
+        $mes_hasta = $request->input('meshasta');
+        $ann_hasta = $request->input('aniohasta');
+        $fec_desde = $ann_desde.'-'.$mes_desde.'-'.'01';
+        $fec_hasta = ultimoDiaMes($ann_hasta.'-'.$mes_hasta.'-'.'01');
+        $set_consu=$request->input('set_consults');
+
+        $queryModel = new QueryModel();
+        $datos = $queryModel->databarGraphConsults($fec_desde,$fec_hasta,$set_consu);
+
+
+
+    return response()->json([
+        'html' => view('comercial.graphs.piegraphic', ['datos' => $datos])->render(),
+        'datos' => $datos // Pasar también los datos como parte de la respuesta JSON
+    ]);
+
     }
 }

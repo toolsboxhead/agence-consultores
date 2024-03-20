@@ -1,5 +1,3 @@
-
-
  button.move,
  button.remove {
      display: none;
@@ -7,10 +5,27 @@
 
  .btn-group {
      width: 100%;
+     height: 20px;
  }
 
  button.moveall,
  button.removeall {
-     background-color: #ececec;
+     background-color: grey;
      width: inherit;
+ }
+
+ .btn-group-space .btn {
+     margin-bottom: 20px;
+     /* Ajusta el espacio vertical entre los botones */
+ }
+
+ .btn {
+     content: "Todos ->";
+ }
+
+ p {
+     font-size: 0.8rem;
+     /* Tamaño inicial del texto */
+     line-height: 1.5;
+     /* Espaciado entre líneas */
  }
