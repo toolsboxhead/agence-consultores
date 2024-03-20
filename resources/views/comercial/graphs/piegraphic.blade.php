@@ -5,8 +5,8 @@
     <div class="card-body">
         <div class="graphs">
 
-            <canvas id="myPieGraph" style="max-height: 200px;"></canvas>
-
+            <canvas id="bar_Chart" style="max-height: 250px;"></canvas>
+            {{--  <canvas id="myPieGraph" style="max-height: 200px;"></canvas> --}}
         </div>
         <div class="tabla-datos2" id="tabla-datos2">
 
@@ -17,8 +17,17 @@
 </div>
 
 
+
+
+
 <script>
     var datos = @json($datos);
+    /*console.log(datos); */
+    /*  let meses1 = String($("#meses").val()).padStart(2, "0");
+     console.log(`mes 1: ${meses1}`);
+     let annio1 = $("#anios").val();
+     let meses2 = String($("#meses2").val()).padStart(2, "0");
+     let annio2 = $("#anios2").val(); */
 
     function genGraphics(datos) {
         let colorsBack = [
@@ -39,28 +48,39 @@
         var consultor = {
             nombre: [],
             valors: [],
+            orden: 0,
+            salBrut: 0.0,
             mesDat: [],
-            annDat: [],
-            colBac: [],
-
+            annDat: 0,
+            colBack: [],
+            colBord: []
         };
-
-        var i = 1;
+        var nomcons = '';
+        var ordcons = 0;
+        var valdatos = [];
+        var cod_actual = '';
+        var sal_bru = 0.0;
+        var mes_val = [];
+        var ani_val = 0;
+        var i = 0;
 
         datos.forEach(function(dato) {
 
-            consultor.nombre.push(dato.cod_user);
-            consultor.valors.push(dato.porcentaje);
-            consultor.mesDat.push(dato.mes);
-            consultor.annDat.push(dato.annio);
-            consultor.colBac.push(colorsBack[i - 1]);
-            consults.push(consultor);
+            consultor.nombre.push(dato.nombre);
+            consultor.push(dato.receita_liquida);
+            consultor.colBack.push(colorsBack[i]);
+            consultor.colBord.push(colorsBord[i])
+
             i += 1;
+
+
         });
 
-
+        consults.push(consultor);
 
         console.log(consults);
+
+
         //********************************************
         /*      ┌─┐┬ ┬┌┐┌┌─┐┬┌─┐┌┐┌  ╔═╗┬─┐┌─┐┌─┐┬┌─┐┌─┐┬─┐
                 ├┤ │ │││││  ││ ││││  ║ ╦├┬┘├─┤├┤ ││  ├─┤├┬┘
@@ -71,34 +91,39 @@
         // function graphicDatosPerf(consults) {
         $(document).ready(function() {
 
-            const areaChartData = {
-                labels: consultor.nombre,
-                datasets: [{
-                    data: consultor.valors,
-                    backgroundColor: consultor.colBack,
-                    hoverOffset: 4,
-                }],
+            var areaChartData = {
+                labels: [], //['Jun', 'Jul', 'Ago'],
+                datasets: []
             };
+            alert(consults.length);
+            var arrlabels = [];
+            consults.forEach(function(consultor) {
+                // alert('eNTRO ');
+                arrlabels.push(consultor.nombre)
 
+                var dataset = {
 
+                    backgroundColor: consultor.colBack,
+                    borderColor: consultor.colBord,
+                    data: consultor.valors
 
-
-
-            var barChartCanvas = document.getElementById('myPieGraph').getContext('2d');
-
-
-            //  var pieCtx = myPieGraph.getContext('2d');
+                };
+                areaChartData.datasets.push(dataset);
+                // alert('eNTRO GRABO');
+            });
+            areaChartData.labels = arrlabels.slice();
+            var barChartCanvas = document.getElementById('bar_Chart').getContext('2d');
 
             var myPieChart = new Chart(barChartCanvas, {
                 /* IMPORTANTE: cargamos el complemento */
                 plugins: [ChartDataLabels],
                 type: 'pie',
-                data: areaChartData,
+                data: barChartCanvas.datasets,
                 options: {
                     plugins: {
                         datalabels: {
                             /* anchor puede ser "start", "center" o "end" */
-                            anchor: "end",
+                            anchor: "center",
                             /* Podemos modificar el texto a mostrar */
                             formatter: (dato) => dato + "%",
                             /* Color del texto */
@@ -106,7 +131,7 @@
                             /* Formato de la fuente */
                             font: {
                                 family: '"Times New Roman", Times, serif',
-                                size: "15",
+                                size: "28",
                                 weight: "bold",
                             },
                             /* Formato de la caja contenedora */
@@ -117,10 +142,11 @@
                             //backgroundColor: "lightblue"
                         }
                     }
-                    // circumferencePercentage: 80
                 }
             });
+            // barChart.update();
         });
+
     }
     genGraphics(datos);
 </script>

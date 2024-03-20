@@ -107,3 +107,7 @@ jQuery(function ($) {
         });
     });
 });
+
+function crearArregloConCeros(cantidad) {
+    return Array.from({ length: cantidad }, () => 0.0);
+}
