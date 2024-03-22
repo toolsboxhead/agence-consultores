@@ -37,8 +37,8 @@
                 ann: rang.annio
             });
         });
-        console.log('Rango ini-fin : ');
-        console.log(val_rango);
+        /*  console.log('Rango ini-fin : ');
+         console.log(val_rango); */
         let meses1 = String($("#meses").val()).padStart(2, "0");
         let annio1 = $("#anios").val();
         let meses2 = String($("#meses2").val()).padStart(2, "0");
@@ -50,10 +50,10 @@
         //dos();
         var meses_rg = obtenerRangoMeses(parseInt(val_rango[0].mes), parseInt(val_rango[0].ann),
             parseInt(val_rango[1].mes), parseInt(val_rango[1].ann));
-        console.log('Arr-Meses : ');
-        console.log(meses_rg);
+        /*  console.log('Arr-Meses : ');
+         console.log(meses_rg); */
         let val_grup = crearArregloConCeros(meses_rg.length);
-        alert(val_grup);
+        /* alert(val_grup); */
 
 
 
@@ -95,7 +95,7 @@
         var nomcons = '';
         var ordcons = 0;
         var valdatos = val_grup.slice();
-        alert(valdatos);
+        /*  alert(valdatos); */
         var cod_actual = '';
         var sal_bru = 0.0;
         var mes_val = [];
@@ -149,9 +149,9 @@
                 mes_val = [];
                 ani_val = [];
                 nomcons = dato.cod_user;
-                console.log(
+                /* console.log(
                     ` Mes : ${meses_rg[mesann].numeroMes} , ${dato.mes} - Años : ${meses_rg[mesann].annio}, ${dato.annio}`
-                );
+                ); */
                 if (meses_rg[mesann].numeroMes == dato.mes && meses_rg[mesann].annio == dato.annio) {
                     // valdatos.push(dato.receita_liquida.replace(/[^0-9.]/g, ''));
                     valdatos[mesann] = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
@@ -197,10 +197,10 @@
         promedio.valors = promedi.slice();
         promedio.colBack = 'rgba(63,134,203,1)';
         promedio.colBord = 'rgba(63,134,203,1)';
-        console.log('Promedios : ');
+        /* console.log('Promedios : ');
         console.log(promedio);
         console.log('Consultores : ');
-        console.log(consults);
+        console.log(consults); */
         var etiquetas = [];
         meses_rg.forEach(function(rang) {
             //alert(rang.nombreAbrev)

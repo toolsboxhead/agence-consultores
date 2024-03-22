@@ -84,7 +84,7 @@
         consultor.colBord = "#3F86CB"; */
         consults.push(consultor);
 
-        console.log(consults);
+        // console.log(consults);
 
 
         const pieData = {
