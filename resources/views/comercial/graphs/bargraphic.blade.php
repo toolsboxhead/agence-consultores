@@ -37,8 +37,7 @@
                 ann: rang.annio
             });
         });
-        /*  console.log('Rango ini-fin : ');
-         console.log(val_rango); */
+
         let meses1 = String($("#meses").val()).padStart(2, "0");
         let annio1 = $("#anios").val();
         let meses2 = String($("#meses2").val()).padStart(2, "0");
@@ -46,14 +45,11 @@
         let info =
             `Performance Consultores <strong>Desde :</strong> ${meses1} - ${annio1} <strong> Hasta :</strong> ${meses2} - ${annio2}`;
         document.getElementById('card-header').innerHTML = info;
-
-        //dos();
-        var meses_rg = obtenerRangoMeses(parseInt(val_rango[0].mes), parseInt(val_rango[0].ann),
+ var meses_rg = obtenerRangoMeses(parseInt(val_rango[0].mes), parseInt(val_rango[0].ann),
             parseInt(val_rango[1].mes), parseInt(val_rango[1].ann));
-        /*  console.log('Arr-Meses : ');
-         console.log(meses_rg); */
+
         let val_grup = crearArregloConCeros(meses_rg.length);
-        /* alert(val_grup); */
+
 
 
 
@@ -120,8 +116,7 @@
             if (dato.cod_user == cod_actual) {
                 mes_val.push(dato.mes);
                 ani_val.push(dato.annio);
-                //valdatos.push(dato.receita_liquida.replace(/[^0-9.]/g, ''));
-                //alert(mesann);
+
                 if (meses_rg[mesann].numeroMes == dato.mes && meses_rg[mesann].annio == dato.annio) {
                     valdatos[mesann] = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
                     maximos = maximos < valdatos[mesann] ? valdatos[mesann] : maximos;
@@ -149,9 +144,7 @@
                 mes_val = [];
                 ani_val = [];
                 nomcons = dato.cod_user;
-                /* console.log(
-                    ` Mes : ${meses_rg[mesann].numeroMes} , ${dato.mes} - Años : ${meses_rg[mesann].annio}, ${dato.annio}`
-                ); */
+
                 if (meses_rg[mesann].numeroMes == dato.mes && meses_rg[mesann].annio == dato.annio) {
                     // valdatos.push(dato.receita_liquida.replace(/[^0-9.]/g, ''));
                     valdatos[mesann] = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
@@ -184,7 +177,7 @@
         valdatos[mesann] = ultimo;
         //console.log(parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));)
         consultor.nombre = nomcons;
-        consultor.valors = valdatos.slice(); // Creamos una copia del array valdatos
+        consultor.valors = valdatos.slice();
         consultor.orden = ordcons;
         consultor.salBrut = sal_bru;
         consultor.mesDat = mes_val.slice();
@@ -197,10 +190,7 @@
         promedio.valors = promedi.slice();
         promedio.colBack = 'rgba(63,134,203,1)';
         promedio.colBord = 'rgba(63,134,203,1)';
-        /* console.log('Promedios : ');
-        console.log(promedio);
-        console.log('Consultores : ');
-        console.log(consults); */
+
         var etiquetas = [];
         meses_rg.forEach(function(rang) {
             //alert(rang.nombreAbrev)
@@ -215,7 +205,7 @@
 
 
 
-        // function graphicDatosPerf(consults) {
+
         $(document).ready(function() {
             var areaChartData = {
                 labels: etiquetas,
@@ -240,9 +230,7 @@
                 type: 'bar',
                 data: areaChartData,
                 options: {
-                    //responsive: true, // Hacer que el gráfico sea responsive
-                    // maintainAspectRatio: false, // Permitir ajustar las proporciones del gráfico
-                    // aspectRatio: 2,
+
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -250,7 +238,7 @@
                             ticks: {
                                 callback: function(value, index, values) {
                                     return 'R$' +
-                                        value; // Agrega el símbolo monetario al valor del eje y
+                                        value;
                                 }
                             }
                         }

@@ -28,9 +28,7 @@
                         <ul class="dropdown-menu " aria-labelledby="dropdownMenuButtonLight">
                             <li><a class="dropdown-item" href="{{ route('comercial.perfcomercial') }}">Performance
                                     Comercial</a></li>
-                            <li><a class="dropdown-item" href=" {{ route('comercial1.datosview') }} ">Pruebas SP</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('grafica') }}">Something else here</a></li>
+
                         </ul>
                     </li>
                     <li class="nav-item">
