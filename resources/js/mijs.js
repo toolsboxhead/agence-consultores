@@ -107,7 +107,8 @@ jQuery(function ($) {
         });
     });
 });
-
-function crearArregloConCeros(cantidad) {
-    return Array.from({ length: cantidad }, () => 0.0);
-}
+maximos = maximos < valdatos[mesann] ? valdatos[mesann] : maximos;
+/* if (meses_rg[mesann].numeroMes == dato.mes && mes_rg_[mesann].annio = dato.annio) {
+    valdatos[mesann] = dato.receita_liquida.replace(/[^0-9.]/g, '');
+    mesann += 1;
+} */

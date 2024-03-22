@@ -28,7 +28,13 @@ class QueryModel extends Model
 
         return DB::select('CALL sp_graph_performance(?,?,?)', [$fec_desde, $fec_hasta,$set_consu]);
     }
-    
+
+    public function rangoGraphConsults($fec_desde,$fec_hasta,$set_consu)
+    {
+
+        return DB::select('CALL sp_mes_rango(?,?,?)', [$fec_desde, $fec_hasta,$set_consu]);
+    }
+
     public function databarGraphConsults($fec_desde,$fec_hasta,$set_consu)
     {
 

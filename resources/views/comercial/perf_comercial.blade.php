@@ -22,7 +22,7 @@
                             <option value="{{ $anio }}">{{ $anio }}</option>
                         @endfor
                     </select>
-                    <h3> A </h3>
+                    <p> A </p>
                     {{--  <label for="meses2">Meses:</label> --}}
                     <select id="meses2" class="form-select form-select-sm" aria-label=".form-select-sm example">
                         @for ($i = 1; $i <= 12; $i++)
@@ -85,4 +85,5 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0  "></script>
+
 </x-platform>

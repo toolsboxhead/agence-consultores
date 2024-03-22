@@ -65,13 +65,20 @@ class ComercialController extends Controller
 
         $queryModel = new QueryModel();
         $datos = $queryModel->dataGraphConsults($fec_desde,$fec_hasta,$set_consu);
+        $rango = $queryModel->rangoGraphConsults($fec_desde,$fec_hasta,$set_consu);
 
 
 
-    return response()->json([
+   /*  return response()->json([
         'html' => view('comercial.graphs.bargraphic', ['datos' => $datos])->render(),
         'datos' => $datos // Pasar también los datos como parte de la respuesta JSON
+    ]); */
+    return response()->json([
+        'html' => view('comercial.graphs.bargraphic', ['datos' => $datos, 'rango' => $rango])->render(),
+        'datos' => $datos,
+        'rango' => $rango
     ]);
+
 
     }
 
