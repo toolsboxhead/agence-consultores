@@ -32,7 +32,7 @@
 
 
 
-        //console.log(meses_rg);
+
 
 
         let colorsBack = [
@@ -84,7 +84,6 @@
         consultor.colBord = "#3F86CB"; */
         consults.push(consultor);
 
-        // console.log(consults);
 
 
         const pieData = {

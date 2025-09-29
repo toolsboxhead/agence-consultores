@@ -1,0 +1,601 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+$nav-fblue: blue;
+$nav-ftran: transparent;
+$nav-fondo: $nav-ftran;
+$poppins: "Poppins", sans-serif;
+$workben: "Workbench", sans-serif;
+$link-1: #d65472;
+$link-2: #37c5f0;
+$link-3: gold;
+$link-4: #ff5800;
+$link-5: #25057b;
+$green1: green;
+$bs-light: #fff;
+$bs-dark: #212529;
+//--texto-color: #F4D03F;
+
+
+
+@mixin theme-nav($theme: null) {
+    @if $theme !=null {
+        background: $theme;
+        box-shadow: 0 0 1px rgba($theme, 0.25);
+        color: #fff;
+    }
+
+    @else {
+        background: transparent;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.9);
+        color: #fff;
+    }
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+:root {
+    /* VARIABLES DE COLORES */
+
+    /* TIPO DE TEXTO Y TAMAÑO */
+    --fo-redd: "Reddit Mono", monospace;
+    --fo-popi: "Poppins", sans-serif;
+    --fo-quic: "Quicksand", sans-serif;
+    --fo-worb: "Workbench", sans-serif;
+    --fo-oswa: "Oswald", sans-serif;
+    /* VARIABLES PARA EL MANEJO DEL FLEXBOX*/
+    --pos-end: flex-end;
+    --pos-str: flex-start;
+    /* DEFINIENDO CARACTERISTICAS GENERALES */
+    font-family: $poppins;
+    font-weight: 300;
+    //COLORES POR DEFECTO DEL NAV
+    --bg-color: #f8f9fa;
+    --tx-color: #212f3d;
+    --shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+}
+
+
+
+@mixin theme {
+    //FONDO
+    background: $bs-dark;
+    //COLOR TEXTO
+    color: rgba(252, 252, 252, 0.67);
+
+    //FUENTE
+
+    //
+
+    box-shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+}
+
+// Definición de clases en Sass con características específicas basadas en el nombre de la clase
+
+// Función para verificar si una clase contiene cierto texto
+@function has-class($class, $text) {
+    @return str-index($class, $text) !=null;
+}
+
+// Estilos de acuerdo al nombre de la clase
+@mixin style-based-on-class($class) {
+    @if has-class($class, 'theme') {
+
+        // Estilos para clases que contienen 'cl1'
+        @if has-class($class, 'dark1') {}
+
+    }
+
+    @else if has-class($class, 'cl2') {
+        // Estilos para clases que contienen 'cl2'
+        color: blue;
+    }
+
+    @else if has-class($class, 'cl3') {
+        // Estilos para clases que contienen 'cl3'
+        color: green;
+    }
+
+    @else {
+        // Estilos por defecto si no coincide con ninguno de los casos anteriores
+        color: black;
+    }
+}
+
+// Aplicación de estilos basados en el nombre de la clase
+.custom-element {
+    @include style-based-on-class('cl1 extra-class');
+}
+
+
+/*
+
+╔═╗┌─┐┌┬┐┌─┐┌─┐┌┐┌┌─┐┌┐┌┌┬┐┌─┐┌─┐
+║  │ ││││├─┘│ ││││├┤ │││ │ ├┤ └─┐
+╚═╝└─┘┴ ┴┴  └─┘┘└┘└─┘┘└┘ ┴ └─┘└─┘
+
+
+┳┓       ┓    ┓
+┃┃┏┓┓┏━━┏┫┏┓┏┓┃┏
+┛┗┗┻┗┛  ┗┻┗┻┛ ┛┗
+
+
+*/
+.nav-dark {
+    background: var(--bs-dark);
+    display: flex;
+    justify-content: var(--pos-end);
+    flex-wrap: wrap;
+
+    .contenedor {
+        display: flex;
+        flex-wrap: wrap;
+
+        margin: 0px 20px;
+    }
+
+    a {
+        color: var(--bs-light);
+        text-decoration: none;
+        padding: 15px 25px;
+        transition: 0.3s ease all;
+        font-size: 18px;
+        border-bottom: 10px;
+    }
+}
+
+/*
+
+
+┳┓               ┓
+┃┃┏┓┓┏  ━━  ┓┏┏┏┓┣┓
+┛┗┗┻┗┛      ┗┻┛┗ ┗┛
+
+*/
+
+.theme-dark {
+    //FONDO
+    --bg-color: $bs-dark;
+
+    //COLOR TEXTO
+    --tx-color: rgba(252, 252, 252, 0.67);
+    //FUENTE
+
+    //SOMBRA
+    --shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+}
+
+.theme-dark-sun {
+    //FONDO
+    --bg-color: $bs-dark;
+
+    //COLOR TEXTO
+    --tx-color: #F4D03F;
+    //FUENTE
+
+    //SOMBRA
+    --shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+}
+
+//@debug 'Fondo : #{--bg-color}';
+.nav-web {
+    // Estilos generales del menú principal
+    // ...
+    //@include theme;
+
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color); //#f8f9fa; /* Color de fondo del nav */
+    padding: 10px 20px;
+    /* Espaciado interno del nav */
+    box-shadow: var(--shadow); //0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    justify-content: flex-end;
+    /* Alinea los enlaces a la derecha */
+    width: 100%;
+    height: 70px;
+
+
+    //--noti: 0;
+    &:has(.opc-menu:target) {
+        --clip: circle(141.4% at 0 0);
+        --noti: 0;
+    }
+
+    .logo-nav {
+        flex: 1 1 auto;
+        /* logo ocupe el espacio restantante */
+        margin-right: 10px;
+        /* Espaciado entre el logo y los enlaces */
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            /* Tamaño del logo */
+            padding-top: 25px;
+        }
+    }
+
+    .container-nav-web {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+
+        .nav__menu {
+
+            color: var(--tx-color);
+            cursor: pointer;
+            font-size: 20px;
+            //text-decoration: none;
+
+            padding: 15px;
+
+            //display: var(--disp,none);
+            @media (max-width: 768px) {
+                --noti: 1;
+            }
+
+            @media (min-width: 768px) {
+                --noti: 0;
+            }
+
+            opacity: var(--noti, 0); //lo tenia en 1 para el menu lateral
+        }
+
+
+        /*
+                       +-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+
+                       |M|e|n|u| |H|o|r|i|z|o|n|t|a|l|
+                       +-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+
+              */
+        .nav-web-menu {
+
+            @media (min-width: 768px) {
+
+                $mobile-breakpoint: 760;
+
+
+
+                ul.opc-menu {
+                    // Estilos del menú principal
+                    // ...
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    flex-wrap: wrap;
+                    height: 100%;
+                    align-items: center;
+                    //--noti: 0;
+                    --rotar: rotate(0);
+
+                    .close-icon {
+                        opacity: 0;
+                    }
+
+                    --noti: 0;
+
+                    >li {
+                        // li DEL MENU PRINCIPAL
+                        position: relative;
+                        list-style: none;
+                        padding: 10px 15px;
+
+                        input {
+                            display: none;
+                        }
+
+
+
+
+                        &:hover i {
+                            transform: rotate(180deg); // Rotar el icono cuando el mouse está sobre la opción "Productos"
+                        }
+
+                        >a {
+                            //link DEL MENU PRINCIPAL
+                            // Estilos específicos del menú principal
+                            // ...
+                            //@include theme;
+                            background: var(--bg-color);
+                            position: relative;
+                            text-decoration: none;
+                            color: var(--tx-color); //#212f3d;
+                            font-weight: 400;
+
+                            i {
+                                position: absolute;
+                                left: 40%;
+                                top: 85%;
+                                margin: 0;
+                                transform: var(--rotar, 0);
+                                transition: 0.5s transform;
+                            }
+
+                            &::before {
+                                // Estilos del borde del menú principal
+                                // ...
+                                content: "";
+                                position: absolute;
+                                top: 100%;
+                                width: 100%;
+                                height: 1px;
+                                background-color: #285a88;
+                                transform: scaleX(0);
+                                // --rotar: rotate(180deg);
+                                box-shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+                                transition: transform 0.4s ease-in-out;
+                                left: 0;
+                            }
+
+                            .toggle span {
+                                position: absolute;
+                                top: 70%;
+                                left: 50%;
+                                rotate: 45deg;
+                                width: 8px;
+                                height: 8px;
+                                transition: 0.5s ease-in-out;
+
+                                // border-bottom: 2px solid #a6acaf;
+                                //border-right: 2px solid #a6acaf;
+                            }
+                        }
+
+                        &:hover ::before {
+                            // Efecto hover solo para el menú principal
+
+                            transform: scaleX(1);
+                        }
+
+                        &:hover .content-sub {
+                            //display: inline-block; /* Muestra el submenú al hacer hover */
+                            opacity: 1;
+                        }
+
+                        /*
+                 +-+-+-+-+-+-+-+-+
+                 |S|u|b|-|M|e|n|u|
+                 +-+-+-+-+-+-+-+-+
+
+               */
+                        ul.submenu {
+                            //@include theme;
+                            overflow: hidden;
+                            top: 120%;
+                            position: absolute;
+                            background-color: var(--bg-color); //#f8f9fa;
+                            // height: max-content;
+                            min-width: max-content;
+                            box-shadow: var(--shadow); //0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+                            // box-shadow: 8px 8px 35px -5px rgba(66, 68, 90, 1);
+                            //border: 1px solid #85929E;
+                            border-radius: 6px;
+                            transition: height 1s ease 0.8s;
+                            z-index: 9999;
+
+                            li {
+                                padding: 0.2em;
+                                list-style: none;
+                                margin: 0;
+                                // padding: 5px 5px;
+
+                                &:hover {
+                                    // @include theme;
+                                    background: rgba(0, 0, 0, 0.2);
+                                    /* Cambia el color de fondo al hacer hover */
+                                    box-shadow: var(--shadow);
+                                }
+                            }
+
+                            a {
+                                //link del submenu
+
+                                padding: 1em 0.2em;
+                                text-decoration: none;
+                                color: var(--tx-color); //rgba(252, 252, 252, 0.67); //grey; //#212f3d;
+                            }
+                        }
+
+                        //ul.submenu
+
+                        //****** CONTENEDOR DE SUBMENU PARA ANIMACIÓN ******
+                        .content-sub {
+                            position: absolute;
+                            transform: scaleY(0);
+                            top: 120%;
+                            z-index: 9999;
+                            opacity: 0; // Ocultar el submenú
+                            visibility: hidden; // Ocultar el submenú
+                            transition: opacity 0.5s ease, visibility 0.5s ease,
+                                transform 0.7s ease; // Agregar transición suave
+
+                        }
+
+                        &:hover .content-sub {
+                            // Estilos cuando se hace hover sobre el elemento
+                            transform: scaleY(1);
+                            opacity: 1; // Mostrar el submenú
+                            visibility: visible; // Hacer visible el submenú
+                        }
+
+                    }
+
+                    // li externo (PPAL)
+
+                    .toggle {
+                        display: none; // Oculta el icono de hamburguesa inicialmente
+                    }
+                }
+
+                // ul.menu externo
+
+
+            }
+
+            // MEDIA QUERY > 768
+
+            /*
+                       +-+-+-+-+ +-+-+-+-+-+-+-+
+                       |M|e|n|u| |L|a|t|e|r|a|l|
+                       +-+-+-+-+ +-+-+-+-+-+-+-+
+  */
+
+            // @Media Query
+            @media (max-width: 768px) {
+                $mobile-breakpoint: 769;
+
+                a:has(> .bi-chevron-down) {
+                    --noti: 0;
+                }
+
+                ul.opc-menu {
+                    position: absolute;
+                    flex-direction: column;
+                    flex: 1 0 auto;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    width: 70vw;
+                    align-content: center;
+                    justify-content: center;
+                    align-items: stretch;
+                    //height: 100vh;
+                    background: var(--bg-color);
+                    flex-wrap: nowrap;
+                    //opacity: var(--lat, 0);
+                    overflow-y: auto;
+                    box-shadow: var(--shadow);
+                    clip-path: var(--clip, circle(0.0% at 0 0));
+                    transition: clip-path 0.8s;
+                    z-index: 9999; // 👈 fuerza que quede arriba de la card
+
+                    .close-icon {
+                        display: flex;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        font-weight: bold;
+                        font-size: 25px;
+                        padding: 10px;
+                        cursor: pointer;
+
+                        i {
+                            //ICONO DE LA X PARA CERRAR MENU
+                            color: black;
+                            position: relative;
+                        }
+                    }
+
+                    //close-icon
+
+                    li {
+                        flex: 1 0 0.1rem;
+                        position: relative;
+                        padding: 10px 10px 10px 20px;
+                        z-index: 9999; // 👈 fuerza que quede arriba de la card
+
+                        //background-color: var(--bg, transparent);
+                        // align-content: end;
+                        //  list-style: none;
+                        &:has(:checked) {
+                            --rows: 1fr;
+                            --rotate: rotate(180deg);
+                            --bg: rgba(0, 0, 0, 0.2);
+                        }
+
+                        input {
+                            position: absolute;
+                            top: 0;
+                            width: 90%;
+                            height: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        }
+
+                        ul.submenu {
+                            overflow: hidden;
+                            z-index: 9999; // 👈 fuerza que quede arriba de la card
+
+                            //display: block; /* Muestra el submenú al hacer hover */
+                            // height: max-content;
+                            li {
+                                padding: 0.4em;
+                            }
+
+                            a {
+                                padding: 1em 0.7em;
+                                background: transparent;
+                                color: var(--tx-color);
+                                font-weight: 300;
+
+                                &:hover {
+                                    background: rgba(0, 0, 0, 0.2);
+                                    /* Cambia el color de fondo al hacer hover */
+                                }
+                            }
+                        }
+
+                        a {
+                            display: flex;
+                            text-decoration: none;
+                            padding: 1.1em 0.7em;
+                            color: var(--tx-color); //#212f3d;
+                            font-weight: 400;
+                            background-color: var(--bg, transparent);
+                            border-radius: 6px;
+
+                            i {
+                                // ICONO DEL CHEVRON DOWN DEL SUBMENU
+                                margin-left: auto;
+                                transform: var(--rotate, 0);
+                                transition: 0.5s transform;
+                            }
+
+                            .toggle span {
+                                position: absolute;
+                                top: 40%;
+                                left: 70%;
+                                rotate: 45deg;
+                                width: 8px;
+                                height: 8px;
+                                transition: 0.5s ease-in-out;
+                                border-bottom: 2px solid #a6acaf;
+                                border-right: 2px solid #a6acaf;
+                            }
+                        }
+
+                        a:hover {
+                            background: rgba(0,
+                                    0,
+                                    0,
+                                    0.2);
+                            /* Cambia el color de fondo al hacer hover */
+                        }
+
+                        .content-sub {
+                            display: grid;
+                            grid-template-rows: var(--rows, 0fr);
+                            transition: 0.5s grid-template-rows;
+                        }
+                    }
+
+                    //li END
+                }
+
+                //ul.menu
+            }
+
+            // Media Query < 768
+        }
+
+        //nav-web-enlaces
+    }
+
+    //contenedor nav-web
+}
+
+//nav-web

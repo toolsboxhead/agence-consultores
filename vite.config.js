@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
     plugins: [
@@ -9,9 +10,16 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/mijs.js",
                 "resources/scss/miestilo.css",
-                "resources/js/acquisitions.js",
             ],
             refresh: true,
+        }),
+        viteStaticCopy({
+            targets: [
+                {
+                    src: "resources/images/*",
+                    dest: "images", // se copiará a public/build/images
+                },
+            ],
         }),
     ],
     resolve: {

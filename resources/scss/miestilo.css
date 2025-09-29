@@ -24,8 +24,39 @@
  }
 
  p {
-     font-size: 0.8rem;
+     /* font-size: 0.8rem; */
      /* Tamaño inicial del texto */
-     line-height: 1.5;
+     /* line-height: 1.5; */
      /* Espaciado entre líneas */
+     font: 1rem/1.5 var(--bs-font-sans-serif);
+ }
+
+ .title-cons {
+     font-size: 1vw;
+     line-height: 1;
+     text-transform: uppercase;
+
+ }
+
+ .btn-fixed {
+     width: 120px;
+     /* mismo ancho */
+     height: 40px;
+     /* misma altura */
+ }
+
+ @media (max-width: 768px) {
+     .btn-group-vertical {
+         flex-direction: row !important;
+         /* Cambia la dirección a fila */
+         justify-content: center;
+         /* Centra los botones horizontalmente */
+         gap: 10px;
+         /* Espacio entre los botones */
+     }
+
+     .btn-group-vertical .btn {
+         width: auto !important;
+         /* Ancho automático para los botones */
+     }
  }
