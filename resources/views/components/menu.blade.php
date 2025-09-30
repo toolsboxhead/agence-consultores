@@ -1,48 +1,55 @@
 <header>
-    {{--  <nav class="navbar navbar-expand-lg bg-body-tertiary"> --}}
-    <nav class ="navbar navbar-expand-md navbar-dark bg-dark" data-bs-theme="dark" aria-label="Fourth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('main') }}">
-                <img src="{{ asset('storage/images/logo/agence-logo.png') }}" alt="Agence" width="80" height="35">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Agence</a>
+
+    <nav id="nav" class="nav-web">
+        <div class="container-nav-web">
+            <div class="logo-nav ">
+                <a href="/">
+                    <h1><img src="{{ Vite::asset('resources/images/logo.gif') }}" alt="Logo" class="img-fluid d-block "
+                            style="max-width: 80px;"></h1>
+                </a>
+            </div>
+
+            <div id="nav-web-menu" class="nav-web-menu">
+                <ul class="opc-menu" id="menu">
+                    <div class="close-icon">
+                        <a href="#" class="aclose"><i class="bi bi-x-square"></i></a>
+                    </div>
+                    <li>
+                        <a href="#">Projetos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Projetos</a>
+                    <li>
+                        <a href="#">Administrativo</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Administrativo</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Comercial
+                    <li>
+                        <a href="#" class="dropdown__link">Comercial
+                            <!-- <div class="toggle"><span></span></div> -->
+                            <input type="checkbox">
+                            <i class="bi bi-chevron-down"></i>
                         </a>
-                        <ul class="dropdown-menu " aria-labelledby="dropdownMenuButtonLight">
-                            <li><a class="dropdown-item" href="{{ route('comercial.perfcomercial') }}">Performance
-                                    Comercial</a></li>
 
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Financeiro</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Usuário</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sair</a>
+                        <div class="content-sub">
+                            <ul class="submenu">
+                                <li><a href='#'> Opcion1</a></li>
+                                <li><a href="{{ route('comercial.perfcomercial') }}"> Performance Comercial </a></li>
+                                <li><a href='#'> Opcion3</a></li>
+                                <!-- <hr> -->
+                                <li><a href='#'> Opcion4</a></li>
+                                <li><a href='#'> Opcion5</a></li>
+                            </ul>
+                        </div>
                     </li>
 
+                    <li>
+                        <a href="#">Financeiro</a>
+                    </li>
+                    <li>
+                        <a href="#">Usuario</a>
+                    </li>
                 </ul>
             </div>
+            <a href="#menu" class="nav__menu">
+                <h1><i class="bi bi-list"></i></h1>
+            </a>
         </div>
     </nav>
 </header>

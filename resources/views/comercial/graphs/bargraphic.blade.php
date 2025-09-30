@@ -1,9 +1,11 @@
+CODIGO DE GRAFICA DE BARRAS
 <div class="card">
     <div class="card-header" id="card-header">
         Performance Consultor
     </div>
     <div class="card-body">
-        <div class="graphs">
+        <div class="graphs" style="width: 100%; height: 65vh;">
+
 
             <canvas id="bar_Chart" style="max-height: 500px;"></canvas>
 
@@ -16,303 +18,245 @@
     </div>
 </div>
 
-
-
-
-
 <script>
-    var datos = @json($datos);
-    var rango = @json($rango);
-    /*console.log(datos); */
+function parseNumber(value) {
+    if (value == null) return 0;
+    if (typeof value === 'number') return value;
+    // quitar espacios, símbolos y separadores de miles
+    let s = String(value).trim();
+    // normalizar coma decimal a punto si necesario (opcional)
+    s = s.replace(/\s/g, '');
+    // eliminar todo excepto dígitos, punto y signo negativo
+    s = s.replace(/[^0-9\.\-]/g, '');
+    // si viene con comas como miles, ya quedaron quitadas. parseFloat.
+    let n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+}
 
+function buildMonthsRange(rango) {
+    if (!Array.isArray(rango) || rango.length < 2) return [];
+    const start = rango[0];
+    const end = rango[1];
+    const startMonth = Number(start.mes);
+    const startYear = Number(start.annio);
+    const endMonth = Number(end.mes);
+    const endYear = Number(end.annio);
 
-    function genGraphicsBar(datos, rango) {
-        var val_rango = [];
+    const monthsNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+        "Octubre", "Noviembre", "Diciembre"
+    ];
+    const result = [];
 
-
-
-        rango.forEach(function(rang) {
-            val_rango.push({
-                mes: rang.mes,
-                ann: rang.annio
-            });
+    let m = startMonth;
+    let y = startYear;
+    while (true) {
+        result.push({
+            numeroMes: m,
+            annio: y,
+            nombreCompleto: monthsNames[m - 1] || m,
+            nombreAbrev: (monthsNames[m - 1] ? monthsNames[m - 1].substring(0, 3) : String(m)) + '-' + y
         });
+        if (m === endMonth && y === endYear) break;
+        m++;
+        if (m > 12) {
+            m = 1;
+            y++;
+        }
+    }
+    return result;
+}
 
-        let meses1 = String($("#meses").val()).padStart(2, "0");
-        let annio1 = $("#anios").val();
-        let meses2 = String($("#meses2").val()).padStart(2, "0");
-        let annio2 = $("#anios2").val();
-        let info =
-            `Performance Consultores <strong>Desde :</strong> ${meses1} - ${annio1} <strong> Hasta :</strong> ${meses2} - ${annio2}`;
-        document.getElementById('card-header').innerHTML = info;
- var meses_rg = obtenerRangoMeses(parseInt(val_rango[0].mes), parseInt(val_rango[0].ann),
-            parseInt(val_rango[1].mes), parseInt(val_rango[1].ann));
+function genGraphicsBar(datos, rango, options = {}) {
+    // sanity checks
+    datos = Array.isArray(datos) ? datos : [];
+    rango = Array.isArray(rango) ? rango : [];
 
-        let val_grup = crearArregloConCeros(meses_rg.length);
+    const monthsRange = buildMonthsRange(rango);
+    const labels = monthsRange.map(m => m.nombreAbrev);
 
+    // índice rápido: "YYYY-M" -> índice en labels
+    const indexMap = {};
+    monthsRange.forEach((m, idx) => indexMap[`${m.annio}-${m.numeroMes}`] = idx);
 
+    // estructuras para acumular
+    const sumPerMonth = new Array(monthsRange.length).fill(0);
+    const countPerMonth = new Array(monthsRange.length).fill(0);
 
+    // paleta de colores (replicables)
+    const colorsBack = ['#007CBE', '#009ECE', '#00BDC5', '#00D8A8', '#98EC85', '#F6C85F', '#F39C12', '#F66D9B',
+        '#A57CFA', '#6EE7B7'
+    ];
+    const colorsBord = ['#3C4856', '#A0ACBD', '#B5577E', '#EF8CB3', '#007CBE', '#A86A00', '#C16000', '#B23B58',
+        '#3D2C6F', '#2B6F59'
+    ];
 
-        let colorsBack = [
-            '#007CBE',
-            '#009ECE',
-            '#00BDC5',
-            '#00D8A8',
-            '#98EC85'
-        ];
-        let colorsBord = [
-            '#3C4856',
-            '#A0ACBD',
-            '#B5577E',
-            '#EF8CB3',
-            '#007CBE'
-        ];
-        var consults = [];
-        var consultor = {
-            nombre: "",
-            valors: [],
-            orden: 0,
-            salBrut: 0.0,
-            mesDat: [],
-            annDat: [],
-            colBack: "",
-            colBord: ""
-        };
-        var promedio = {
-            nombre: "",
-            valors: [],
-            orden: 0,
-            salBrut: 0.0,
-            mesDat: [],
-            annDat: [],
-            colBack: "",
-            colBord: ""
-        };
-        var nomcons = '';
-        var ordcons = 0;
-        var valdatos = val_grup.slice();
-        /*  alert(valdatos); */
-        var cod_actual = '';
-        var sal_bru = 0.0;
-        var mes_val = [];
-        var ani_val = [];
-        var promedi = [];
-        var pro_mes = [];
-        var pro_ann = [];
-        var meses = [];
-        var i = 1;
-        var mesann = 0;
-        var maximos = 0;
-        var ultimo = 0.0;
-        datos.forEach(function(dato) {
-            if (i == 1) {
-                nomcons = dato.cod_user;
-                ordcons = i;
-                sal_bru = dato.sal_bruto;
-                cod_actual = dato.cod_user;
-                i += 1;
-            }
+    // Agrupar por consultor
+    const consultMap = new Map();
+    let colorIdx = 0;
+    let globalMax = 0;
 
-            if (dato.cod_user == cod_actual) {
-                mes_val.push(dato.mes);
-                ani_val.push(dato.annio);
+    datos.forEach(row => {
+        const cod = row.cod_user ?? row.cod ?? 'unknown';
+        const name = row.nom_user ?? cod;
+        const annio = Number(row.annio);
+        const mes = Number(row.mes);
+        const key = `${annio}-${mes}`;
+        const costo = parseNumber(row.promedio_sal ?? row.promediosal ?? 0);
+        const idx = indexMap[key];
 
-                if (meses_rg[mesann].numeroMes == dato.mes && meses_rg[mesann].annio == dato.annio) {
-                    valdatos[mesann] = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
-                    maximos = maximos < valdatos[mesann] ? valdatos[mesann] : maximos;
-                } else {
-                    ultimo = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
-                }
-                promedi.push(dato.promedio_sal.replace(/[^0-9.]/g, ''));
-                pro_mes.push(dato.mes);
-                pro_ann.push(dato.annio);
-                mesann++;
-            } else {
-                consultor.nombre = nomcons;
-                consultor.valors = valdatos.slice();
-                consultor.orden = ordcons;
-                consultor.salBrut = sal_bru;
-                consultor.mesDat = mes_val.slice();
-                consultor.annDat = ani_val.slice();
-                consultor.colBack = colorsBack[ordcons - 1];
-                consultor.colBord = colorsBord[ordcons - 1];
-                consults.push(consultor);
+        // convertir valores
+        const receita = parseNumber(row.receita_liquida ?? row.valor ?? 0);
+        const sal_bruto = parseNumber(row.sal_bruto ?? row.salBrut ?? 0);
 
-                i++;
-                mesann = 0;
-                valdatos = val_grup.slice();
-                mes_val = [];
-                ani_val = [];
-                nomcons = dato.cod_user;
-
-                if (meses_rg[mesann].numeroMes == dato.mes && meses_rg[mesann].annio == dato.annio) {
-                    // valdatos.push(dato.receita_liquida.replace(/[^0-9.]/g, ''));
-                    valdatos[mesann] = parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));
-                    maximos = maximos < valdatos[mesann] ? valdatos[mesann] : maximos;
-                }
-                promedi.push(dato.promedio_sal.replace(/[^0-9.]/g, ''));
-                ordcons = i;
-                mesann++
-                sal_bru = dato.sal_bruto;
-                mes_val.push(dato.mes);
-                ani_val.push(dato.annio);
-                pro_mes.push(dato.mes);
-                pro_ann.push(dato.annio);
-                cod_actual = dato.cod_user;
-
-                consultor = {
-                    nombre: "",
-                    valors: [],
-                    orden: 0,
-                    salBrut: 0.0,
-                    mesDat: [],
-                    annDat: [],
-                    colBack: "",
-                    colBord: ""
-
-                };
-            }
-        });
-        // valdatos.push(ultimo);
-        valdatos[mesann] = ultimo;
-        //console.log(parseFloat(dato.receita_liquida.replace(/[^0-9.]/g, ''));)
-        consultor.nombre = nomcons;
-        consultor.valors = valdatos.slice();
-        consultor.orden = ordcons;
-        consultor.salBrut = sal_bru;
-        consultor.mesDat = mes_val.slice();
-        consultor.annDat = ani_val.slice();
-        consultor.colBack = colorsBack[ordcons - 1];
-        consultor.colBord = colorsBord[ordcons - 1];
-        consults.push(consultor);
-        promedio.mesDat = pro_mes.slice();
-        promedio.annDat = pro_ann.slice();
-        promedio.valors = promedi.slice();
-        promedio.colBack = 'rgba(63,134,203,1)';
-        promedio.colBord = 'rgba(63,134,203,1)';
-
-        var etiquetas = [];
-        meses_rg.forEach(function(rang) {
-            //alert(rang.nombreAbrev)
-            etiquetas.push(rang.nombreAbrev)
-
-        });
-
-        //********************************************
-        /*      ┌─┐┬ ┬┌┐┌┌─┐┬┌─┐┌┐┌  ╔═╗┬─┐┌─┐┌─┐┬┌─┐┌─┐┬─┐
-                ├┤ │ │││││  ││ ││││  ║ ╦├┬┘├─┤├┤ ││  ├─┤├┬┘
-                └  └─┘┘└┘└─┘┴└─┘┘└┘  ╚═╝┴└─┴ ┴└  ┴└─┘┴ ┴┴└─ */
-
-
-
-
-        $(document).ready(function() {
-            var areaChartData = {
-                labels: etiquetas,
-                datasets: []
-            };
-
-            consults.forEach(function(consultor) {
-
-                var dataset = {
-                    label: consultor.nombre,
-                    backgroundColor: consultor.colBack,
-                    borderColor: consultor.colBord,
-                    data: consultor.valors,
-                    order: consultor.orden
-                };
-                areaChartData.datasets.push(dataset);
-
+        if (!consultMap.has(cod)) {
+            consultMap.set(cod, {
+                code: cod,
+                name: name,
+                values: new Array(monthsRange.length).fill(0),
+                salBrut: sal_bruto,
+                colorBack: colorsBack[colorIdx % colorsBack.length],
+                colorBord: colorsBord[colorIdx % colorsBord.length]
             });
-            var barChartCanvas = document.getElementById('bar_Chart').getContext('2d');
-
-            var barChart = new Chart(barChartCanvas, {
-                type: 'bar',
-                data: areaChartData,
-                options: {
-
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: maximos + 500,
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    return 'R$' +
-                                        value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            //barChart.update();
-
-            barChart.data.datasets.push({
-                label: 'Promedios',
-                backgroundColor: '#00D8A8',
-                borderColor: '#66E653',
-                data: promedio.valors,
-                type: 'line',
-            });
-            /* Actualizamos la gráfica */
-            barChart.update();
-
-        });
-
-
-
-
-
-        function crearArregloConCeros(cantidad) {
-            // Crear un nuevo arreglo con la longitud especificada
-            return Array.from({
-                length: cantidad
-            }, () => 0.0);
+            colorIdx++;
         }
 
-        function obtenerRangoMeses(mesInicio, annInicio, mesFin, annFin) {
-            var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-            ];
-            var rangoMeses = [];
+        // si el mes está dentro del rango, acumular
+        if (typeof idx !== 'undefined') {
+            sumPerMonth[idx] += costo;
+            consultMap.get(cod).values[idx] += receita; // sumamos posible múltiples facturas
 
-            // Generar el rango de meses
-            var mesActual = mesInicio;
-            var annActual = annInicio;
-            while (!(mesActual === mesFin && annActual === annFin)) {
-                rangoMeses.push({
-                    nombreCompleto: `${meses[mesActual - 1]}`,
-                    nombreAbrev: `${meses[mesActual - 1].substring(0,3)}-${annActual}`,
-                    numeroMes: mesActual,
-                    numeroMes: mesActual,
-                    annio: annActual
-                });
-
-                // Avanzar al siguiente mes
-                mesActual++;
-                if (mesActual > 12) {
-                    mesActual = 1; // Si el mes actual supera diciembre, retrocede a enero del siguiente año
-                    annActual++;
-                }
-            }
-            // Agregar el mes final del rango
-            rangoMeses.push({
-                nombreCompleto: `${meses[mesFin - 1]}`,
-                nombreAbrev: `${meses[mesFin - 1].substring(0,3)}-${annFin}`,
-                numeroMes: mesFin,
-                annio: annFin
-            });
-
-            return rangoMeses;
+            // para promedio por mes contaremos si este consultor aporta (evitamos múltiples contados por varias facturas)
+            // Usaremos un mapa por consultor/mes para no contar duplicados: (implementamos más abajo)
+            globalMax = Math.max(globalMax, consultMap.get(cod).values[idx]);
         }
+    });
+
+    // Para contar un consultor una sola vez por mes (si había varias facturas)
+    // construiremos un Set de "cod-idx" recorriendo datos
+    const seenConsultMonth = new Set();
+    datos.forEach(row => {
+        const cod = row.cod_user ?? row.cod ?? 'unknown';
+        const annio = Number(row.annio);
+        const mes = Number(row.mes);
+        const key = `${annio}-${mes}`;
+        const costo = parseNumber(row.promedio_sal ?? row.promedio_sal ?? 0);
+        const idx = indexMap[key];
+        if (typeof idx !== 'undefined') {
+            const setKey = `${cod}__${idx}`;
+            if (!seenConsultMonth.has(setKey)) {
+                seenConsultMonth.add(setKey);
+                countPerMonth[idx] += 1;
+            }
+        }
+    });
 
 
+    const promedioValues = sumPerMonth.map((s, i) => {
+        return countPerMonth[i] ? +(s / countPerMonth[i]) : 0;
 
+    });
 
-
-
+    // Construir datasets para Chart.js
+    const datasets = [];
+    for (const consult of consultMap.values()) {
+        datasets.push({
+            label: consult.name,
+            backgroundColor: consult.colorBack,
+            borderColor: consult.colorBord,
+            data: consult.values.map(v => +v.toFixed(2)), // asegurar número
+            order: 2
+        });
     }
 
 
-    genGraphicsBar(datos, rango);
+    datasets.push({
+        label: 'Promedio por mes',
+        data: promedioValues.map(v => +v.toFixed(2)),
+        type: 'line',
+        fill: false,
+        borderColor: options.promedioLineColor || '#FF5722',
+        backgroundColor: options.promedioLineColor || '#FF5722',
+        tension: 0.2,
+        order: 1,
+        yAxisID: 'y'
+    });
+
+    // limpiar gráfico previo si existiera
+    if (window.__barChartInstance) {
+        try {
+            window.__barChartInstance.destroy();
+        } catch (e) {
+            /* ignore */
+        }
+        window.__barChartInstance = null;
+    }
+
+    const ctx = document.getElementById('bar_Chart');
+    if (!ctx) {
+        console.error('Canvas #bar_Chart no encontrado');
+        return null;
+    }
+
+    const config = {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: false
+                },
+                y: {
+                    beginAtZero: true,
+                    // sugerir máximo con un 10% extra sobre el máximo encontrado
+                    suggestedMax: Math.ceil((globalMax || 0) * 1.1),
+                    ticks: {
+                        callback: function(value) {
+                            // formato local con 2 decimales, prefijo R$
+                            if (typeof value === 'number') {
+                                return 'R$ ' + value.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
+                            return value;
+                        }
+                    }
+                }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const v = context.parsed.y ?? context.parsed;
+                            return context.dataset.label + ': R$ ' + Number(v).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    };
+
+    // crear grafica
+    window.__barChartInstance = new Chart(ctx.getContext('2d'), config);
+    return window.__barChartInstance;
+}
+
+var datos = @json($datos);
+var rango = @json($rango);
+genGraphicsBar(datos, rango);
 </script>

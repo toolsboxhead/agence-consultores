@@ -1,4 +1,5 @@
 /* alert("Hola world"); */
+
 jQuery(function ($) {
     let duallist = $("#test").bootstrapDualListbox({
         nonSelectedListLabel: "Sin Seleccionar",
@@ -11,15 +12,17 @@ jQuery(function ($) {
         infoTextEmpty: "",
         infoText: false,
     });
+
     $("#g-bar").click(function (e) {
-        var select = document.getElementById("test");
-        var consSelected = [];
+        let select = document.getElementById("test");
+        let consSelected = [];
         for (let i = 0; i < select.options.length; i++) {
             if (select.options[i].selected) {
                 consSelected.push("'" + select.options[i].value + "'");
+                //  consSelected.push(select.options[i].value);
             }
         }
-        var conjuntoString = consSelected.join(", ");
+        let conjuntoString = consSelected.join(", ");
 
         let meses1 = String($("#meses").val()).padStart(2, "0");
         let annio1 = $("#anios").val();
@@ -80,11 +83,13 @@ jQuery(function ($) {
             var consSelected = [];
             for (let i = 0; i < select.options.length; i++) {
                 if (select.options[i].selected) {
-                    consSelected.push("'" + select.options[i].value + "'");
+                    //consSelected.push("'" + select.options[i].value + "'");
+                    consSelected.push(select.options[i].value);
                 }
             }
-            var conjuntoString = consSelected.join(", ");
+            var conjuntoString = consSelected.join(",");
 
+            conjuntoString;
             let meses1 = String($("#meses").val()).padStart(2, "0");
             let annio1 = $("#anios").val();
             let meses2 = String($("#meses2").val()).padStart(2, "0");
@@ -107,8 +112,17 @@ jQuery(function ($) {
         });
     });
 });
-maximos = maximos < valdatos[mesann] ? valdatos[mesann] : maximos;
-/* if (meses_rg[mesann].numeroMes == dato.mes && mes_rg_[mesann].annio = dato.annio) {
-    valdatos[mesann] = dato.receita_liquida.replace(/[^0-9.]/g, '');
-    mesann += 1;
-} */
+
+const styles = document.documentElement.style;
+const clases = document.documentElement.classList;
+
+// Iterar sobre la lista de clases
+for (let i = 0; i < clases.length; i++) {
+    const className = clases[i];
+
+    // Verificar si la clase comienza con el texto especificado
+    if (className.startsWith("bs")) {
+        // Extraer el valor de la clase
+        const valorClase = className.split("-")[1]; // Suponiendo que el formato sea "textoEspecifico-valor"
+    }
+}
